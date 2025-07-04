@@ -5,13 +5,17 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
-
-  app.useStaticAssets(join(__dirname, '..', 'client/build'), {
-    index: 'index.html',
-    prefix: '/',  // root 경로 설정
+  
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
-  await app.listen(3001);
+  app.useStaticAssets(join(process.cwd(), 'client/build'), {
+    index: 'index.html',
+    prefix: '/',
+  });
+
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
